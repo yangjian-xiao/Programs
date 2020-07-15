@@ -3,6 +3,7 @@
 
 # Eclipse metadata
 *.project
+*.classpath
 
 # Log file
 *.log

@@ -52,12 +52,12 @@ You must write a comment header for each test case that succinctly describes
 that test case. Just write a short description -- a long verbose description 
 is no good!
 
-This assignment: Black box testing
+This assignment: Closed Box Testing
 ==================================
 
-Black box testing aims to test the code according to its requirements, 
+Closed box testing aims to test the code according to its requirements, 
 without being able to look into the code and see how things are implemented.
-The code is treated as a "black box" -- in the case of testing an individual 
+The code is treated as a "closed box" -- in the case of testing an individual 
 class, only its public API is considered.
 
 Suggested reading:
@@ -68,9 +68,9 @@ http://en.wikipedia.org/wiki/Equivalence_Partitioning
 http://en.wikipedia.org/wiki/Boundary-value_analysis
 
 Use the ideas from equivalence partitioning and boundary value analysis to 
-create JUnit test cases which fully test the three classes under black box 
+create JUnit test cases which fully test the three classes under closed box 
 testing. The JUnit test classes must be named "Circle1Test" and 
-"Circle2Test". Note that since this is black box testing and both concrete 
+"Circle2Test". Note that since this is closed box testing and both concrete 
 classes under test should implement the same requirements, your two test 
 classes should be exactly the same except for which class they reference 
 (Circle1 and Circle2).

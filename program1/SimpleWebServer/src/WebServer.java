@@ -18,17 +18,16 @@ import java.net.*;
 
 public class WebServer
 {
+   private ServerSocket socket;
+   private boolean running;
 
-private ServerSocket socket;
-private boolean running;
-
-/**
-* Constructor
-**/
-private WebServer()
-{
-   running = false;
-}
+   /**
+   * Constructor
+   **/
+   private WebServer()
+   {
+      running = false;
+   }
 
 /**
 * Web server starting point. This method does not return until

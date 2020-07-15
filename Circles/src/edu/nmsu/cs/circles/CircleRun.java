@@ -1,3 +1,5 @@
+package edu.nmsu.cs.circles;
+
 /**
 * Sample tester for Circle1 and Circle2
 **/

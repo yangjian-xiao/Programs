@@ -1,3 +1,5 @@
+package edu.nmsu.cs.circles;
+
 
 public class Point
 {

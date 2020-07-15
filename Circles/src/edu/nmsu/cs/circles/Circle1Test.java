@@ -1,3 +1,5 @@
+package edu.nmsu.cs.circles;
+
 
 /***
 * Example JUnit testing class for Circle1 (and Circle)

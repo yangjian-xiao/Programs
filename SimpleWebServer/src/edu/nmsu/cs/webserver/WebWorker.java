@@ -16,6 +16,8 @@ package edu.nmsu.cs.webserver;
  * request; it writes out an HTTP header to begin its response, and then it writes out some HTML
  * content for the response content. HTTP requests and responses are just lines of text (in a very
  * particular format).
+ * 
+ * @author Jon Cook, Ph.D.
  *
  **/
 

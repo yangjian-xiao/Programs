@@ -20,7 +20,8 @@ package edu.nmsu.cs.webserver;
  * @author Jon Cook, Ph.D.
  *
  **/
-
+import java.io.File;
+import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +35,7 @@ public class WebWorker implements Runnable
 {
 
 	private Socket socket;
+	private File file; 
 
 	/**
 	 * Constructor: must have a valid open socket
@@ -85,7 +87,23 @@ public class WebWorker implements Runnable
 				line = r.readLine();
 				System.err.println("Request line: (" + line + ")");
 				if (line.length() == 0)
-					break;
+					break;	
+
+				if (line.substring(0,3).equals("GET"))
+				{
+					String[] parts = line.split(" ");
+					String path = "." + parts[1];
+					System.out.println(path);
+					if(path.equals("./"))
+					{
+						System.out.println("server is working!");
+						//trun to default html path
+						path = "./res/default.html";
+						System.out.println("request file: ");
+					}
+					file = new File(path);
+				}
+						
 			}
 			catch (Exception e)
 			{
@@ -109,11 +127,18 @@ public class WebWorker implements Runnable
 		Date d = new Date();
 		DateFormat df = DateFormat.getDateTimeInstance();
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
-		os.write("HTTP/1.1 200 OK\n".getBytes());
+		if(file.exists() && file.isFile())
+		{
+			os.write("HTTP/1.1 200 OK\n".getBytes());
+		}
+		else
+		{
+			os.write("HTTP/1.1 404 Not Found\n".getBytes());
+		}
 		os.write("Date: ".getBytes());
 		os.write((df.format(d)).getBytes());
 		os.write("\n".getBytes());
-		os.write("Server: Jon's very own server\n".getBytes());
+		os.write("Server: Xiao's very own server\n".getBytes());
 		// os.write("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\n".getBytes());
 		// os.write("Content-Length: 438\n".getBytes());
 		os.write("Connection: close\n".getBytes());
@@ -132,9 +157,30 @@ public class WebWorker implements Runnable
 	 **/
 	private void writeContent(OutputStream os) throws Exception
 	{
-		os.write("<html><head></head><body>\n".getBytes());
-		os.write("<h3>My web server works!</h3>\n".getBytes());
-		os.write("</body></html>\n".getBytes());
+		if(!file.exists() || !file.isFile())
+		{
+			os.write("<html><head></head>".getBytes());
+			os.write("<body><h1><center>404 Error Page Not Found</center></h1></body></html>".getBytes());
+			return;
+		}
+		else
+		{
+			BufferedReader b = new BufferedReader(new FileReader(file));
+			String s;
+			Date d = new Date();
+			DateFormat df = DateFormat.getDateTimeInstance();
+			df.setTimeZone(TimeZone.getTimeZone("GMT"));
+			while((s=b.readLine()) != null)
+			{
+				s = s.replaceAll("<cs371date>", df.format(d));
+				s = s.replaceAll("<cs371server>", "xiao's server");
+				os.write(s.getBytes());
+			}
+			b.close();
+		}
+		//os.write("<html><head></head><body>\n".getBytes());
+		//os.write("<h3>My web server works!</h3>\n".getBytes());
+		//os.write("</body></html>\n".getBytes());
 	}
 
 } // end class

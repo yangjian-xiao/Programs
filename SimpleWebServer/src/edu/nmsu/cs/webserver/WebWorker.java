@@ -22,6 +22,7 @@ package edu.nmsu.cs.webserver;
  **/
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +37,8 @@ public class WebWorker implements Runnable
 
 	private Socket socket;
 	private File file; 
+	private String path;
+	private String fileType;
 
 	/**
 	 * Constructor: must have a valid open socket
@@ -58,8 +61,38 @@ public class WebWorker implements Runnable
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 			readHTTPRequest(is);
-			writeHTTPHeader(os, "text/html");
-			writeContent(os);
+			file = new File(path);
+			fileType = path.substring(path.lastIndexOf(".")+1);
+			if(file.exists() && file.isFile())
+			{
+				//determine file type and write file header
+				if (fileType.equals("png"))
+				{
+					writeHTTPHeader(os, "image/png");
+				}
+				else if (fileType.equals("gif")) 
+				{
+					writeHTTPHeader(os, "image/gif");
+				}
+				else if (fileType.equals("jpg"))
+				{
+					writeHTTPHeader(os, "image/jpeg");
+				}
+				else
+				{
+					writeHTTPHeader(os, "text/html");
+				}
+
+				//output file content
+				writeContent(os);
+			}
+			else
+			{
+				// output error page
+				writeHTTPHeader(os, "text/html");
+				os.write("<html><head></head>".getBytes());
+				os.write("<body><h1><center>404 Error Page Not Found</center></h1></body></html>".getBytes());
+			}
 			os.flush();
 			socket.close();
 		}
@@ -92,16 +125,16 @@ public class WebWorker implements Runnable
 				if (line.substring(0,3).equals("GET"))
 				{
 					String[] parts = line.split(" ");
-					String path = "." + parts[1];
+					path = "." + parts[1];
 					System.out.println(path);
 					if(path.equals("./"))
 					{
 						System.out.println("server is working!");
-						//trun to default html path
-						path = "./res/default.html";
+						//turn to default html path
+						path = "./www/res/default.html";
 						System.out.println("request file: ");
 					}
-					file = new File(path);
+
 				}
 						
 			}
@@ -124,24 +157,27 @@ public class WebWorker implements Runnable
 	 **/
 	private void writeHTTPHeader(OutputStream os, String contentType) throws Exception
 	{
-		Date d = new Date();
-		DateFormat df = DateFormat.getDateTimeInstance();
-		df.setTimeZone(TimeZone.getTimeZone("GMT"));
-		if(file.exists() && file.isFile())
-		{
-			os.write("HTTP/1.1 200 OK\n".getBytes());
-		}
-		else
-		{
-			os.write("HTTP/1.1 404 Not Found\n".getBytes());
-		}
-		os.write("Date: ".getBytes());
-		os.write((df.format(d)).getBytes());
-		os.write("\n".getBytes());
-		os.write("Server: Xiao's very own server\n".getBytes());
+		//Date d = new Date();
+		//DateFormat df = DateFormat.getDateTimeInstance();
+		//df.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		os.write("HTTP/1.1 200 OK\n".getBytes());
+		// if(file.exists() && file.isFile())
+		// {
+		// 	//os.write("HTTP/1.1 200 OK\n".getBytes());
+		// 	os.write("HTTP".getBytes());
+		// }
+		// else
+		// {
+		// 	os.write(" ".getBytes());
+		// }
+		//os.write("Date: ".getBytes());
+		//os.write((df.format(d)).getBytes());
+		//os.write("\n".getBytes());
+		//os.write("Server: Xiao's very own server\n".getBytes());
 		// os.write("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\n".getBytes());
 		// os.write("Content-Length: 438\n".getBytes());
-		os.write("Connection: close\n".getBytes());
+		//os.write("Connection: close\n".getBytes());
 		os.write("Content-Type: ".getBytes());
 		os.write(contentType.getBytes());
 		os.write("\n\n".getBytes()); // HTTP header ends with 2 newlines
@@ -157,14 +193,9 @@ public class WebWorker implements Runnable
 	 **/
 	private void writeContent(OutputStream os) throws Exception
 	{
-		if(!file.exists() || !file.isFile())
+		if(fileType.equals("html"))
 		{
-			os.write("<html><head></head>".getBytes());
-			os.write("<body><h1><center>404 Error Page Not Found</center></h1></body></html>".getBytes());
-			return;
-		}
-		else
-		{
+			//output html
 			BufferedReader b = new BufferedReader(new FileReader(file));
 			String s;
 			Date d = new Date();
@@ -177,6 +208,19 @@ public class WebWorker implements Runnable
 				os.write(s.getBytes());
 			}
 			b.close();
+		}
+		else
+		{
+			//output image
+			//read inputstream for local image
+			FileInputStream fis = new FileInputStream(path);
+			int i = fis.available();
+			//byte array is used to store bite data of the image
+			byte[] buff = new byte[i];
+			fis.read(buff);
+			fis.close();
+			os.write(buff);
+
 		}
 		//os.write("<html><head></head><body>\n".getBytes());
 		//os.write("<h3>My web server works!</h3>\n".getBytes());

@@ -1,24 +1,16 @@
-<project name="webserver1.0" default="compile" basedir=".">
+<project name="webserver1.0" default="run" basedir=".">
     <description>
         Buildfile to compile and run SimpleWebServer program
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src/"/>
-  <property name="bin" location="bin/"/>
+  <property name="bin" location="www/bin/"/>
 
-  <!--delete bin -->
-  <target name="clean" description="clean up" >
-    <delete dir="${bin}"/>
-  </target>
-
-  <!-- create new bin folder -->
-  <target name="init" depends="clean" >
-    <mkdir dir="${bin}"/>
-  </target>
-
-  <target name="compile" depends="init" description="compile the source " >
-    <!-- Compile the java code from ${src} into ${bin} -->
-    <javac srcdir="${src}" destdir="${bin}"/>
+  <target name="compile" description="compile the source " >
+    <!-- Compile the java code from ${src} into ${bin} -->  
+   <delete dir="${bin}"/>
+   <mkdir dir="${bin}"/>
+   <javac srcdir="${src}" destdir="${bin}"/>
   </target>
 
   <target name="run" depends="compile" description="run WebServer.java">
@@ -26,4 +18,7 @@
     </java>
   </target>
 
+  <target name="clean" description="delete bin folder">
+    <delete dir="${bin}"/>
+  </target>
 </project>

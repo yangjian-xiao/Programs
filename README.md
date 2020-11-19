@@ -16,9 +16,10 @@ Three tasks have been done:
 ## Program 3
 This assignment relies on the Coverage programs.
 ### RacingScore1 testing:
-1 A bug about scores' range in the mian function has been fixed.
-2 A bug of overallScore() method has been fixed.
-3 Nine groups of data have been utilized to enhance test coverage to 100%. They are:
+
+1 A bug about scores' range in the mian function has been fixed. </br>
+2 A bug of overallScore() method has been fixed. </br>
+3 Nine groups of data have been utilized to enhance test coverage to 100%. They are: </br>
 - 9, 8, 10
 - 9, 8
 - 9, 8, a
@@ -29,9 +30,11 @@ This assignment relies on the Coverage programs.
 - 9, 8, -1
 - 9, 8, 51
 ### RacingScore2 testing:
-1 A bug of overallScore() method has been fixed
-2 several groups of data have been used to enhance test coverage to 95% as RacingScore1 testing.
-- 
+
+1 A bug of overallScore() method has been fixed. </br>
+2 several groups of data have been used to enhance test coverage to 95% as RacingScore1 testing. </br>
+
+
 
 ## Program 4
 This assignment relies on the Circles programs.

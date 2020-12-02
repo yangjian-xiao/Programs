@@ -11,7 +11,7 @@ package edu.nmsu.cs.circles;
 
 import org.junit.*;
 
-public class Circle1Test
+public class Circle2Test
 {
 	// Data you need for each test case
 	private Circle1 circle1;
@@ -45,7 +45,7 @@ public class Circle1Test
 	{
 		Point p;
 		// System.out.println("Running test simpleMove.");
-		p = circle1.moveBy(1, 1);
+		p = circle2.moveBy(1, 1);
 		Assert.assertTrue(p.x == 2 && p.y == 3);
 	}
 
@@ -57,7 +57,7 @@ public class Circle1Test
 	{
 		Point p;
 		// System.out.println("Running test simpleMoveNeg.");
-		p = circle1.moveBy(-1, -1);
+		p = circle2.moveBy(-1, -1);
 		Assert.assertTrue(p.x == 0 && p.y == 1);
 	}
 
@@ -67,19 +67,20 @@ public class Circle1Test
 	@Test
 	public void testScale()
 	{
-		// System.out.println("\nRunning testScale.");
-		Assert.assertEquals(2*circle1.radius, circle1.scale(2),0.001);
+		// System.out.println("Running testScale.");
+		Assert.assertEquals(3*circle2.radius, circle2.scale(3),0.001);
 	}
 
 	//
-	//Test intersects method
+	//Test intersects method of Circle2
 	//
 	@Test
 	public void testIntersects()
 	{
-		// System.out.println("\nRunning testIntersects.");
-		Assert.assertEquals(false, circle1.intersects(circle2));
+		// System.out.println("Running testIntersects.");
+		Assert.assertEquals(false, circle2.intersects(circle1));
 	}
+
 
 
 	/***

@@ -1,0 +1,61 @@
+<project name="circlea" default="test" >
+    <!-- directory configuration -->
+    <property name="src.dir" location="src/" />
+    <property name="build.dir" location="bin/" />
+    <property name="lib.dir" location="lib/" />
+
+    <!-- classpath configuration -->
+    <path id="test.path.ref">
+        <fileset dir="${lib.dir}" includes="**/*.jar" />
+        <!-- <fileset dir="${build.dir}" includes="**/*.class" /> -->
+        <pathelement path="${build.dir}:bin/" />
+    </path>
+
+    <path id="run.path.ref">
+        <pathelement path="${build.dir}" />
+    </path>
+
+    <!-- compile  -->
+    <target name="compile">
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" debug="true">
+            <classpath refid="test.path.ref" />
+        </javac>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="CircleRun">
+            <classpath refid="run.path.ref" />
+            <arg value="1" />
+            <arg value="2" />
+            <arg value="3" />
+            <arg value="1" />
+            <arg value="2" />
+            <arg value="2" />
+        </java>
+    </target>
+    <!-- testing cases -->
+    <target name="testCircle1" depends="compile">
+        <java classname="org.junit.runner.JUnitCore">
+            <classpath refid="test.path.ref" />
+            <arg value="edu.nmsu.cs.circles.Circle1Test" />
+        </java>
+    </target>
+
+    <target name="testCircle2" depends="compile">
+        <java classname="org.junit.runner.JUnitCore">
+            <classpath refid="test.path.ref" />
+            <arg value="edu.nmsu.cs.circles.Circle2Test" />
+        </java>
+    </target>
+
+    <target name="test" depends="testCircle1, testCircle2">
+    </target>
+
+    <!-- clean up generated files -->
+    <target name="clean" >
+        <delete>
+            <fileset dir="." includes="**/*.class" />
+        </delete>
+    </target>
+</project>
